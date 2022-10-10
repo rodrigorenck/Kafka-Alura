@@ -17,7 +17,7 @@ public class NewOrderMain {
                 //vamos simular que nossas chaves serao o id do usuario
                 var key = UUID.randomUUID().toString();
                 var value = key + ",2918,10650";
-                kafkaDispatcher.send("ECOMMERCE_NEW_ORDER", key, value));
+                kafkaDispatcher.send("ECOMMERCE_NEW_ORDER", key, value);
                 //vamos enviar outro record
                 var email = "Thank you for your order! We are processing your order!";
                 kafkaDispatcher.send("ECOMMERCE_SEND_EMAIL", key, email);
