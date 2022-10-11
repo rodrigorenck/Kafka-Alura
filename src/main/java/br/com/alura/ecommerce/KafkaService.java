@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * Classe com a logica de criar e executar um consumidor
@@ -24,11 +25,21 @@ public class KafkaService implements Closeable {
      * Vai receber tambem a FUNCAO que ele vai executar para cada mensagem recebida - parse
      */
     public KafkaService(String groupId, String topic, ConsumerFunction parse) {
-        this.consumer = new KafkaConsumer<>(properties(groupId));
-        this.parse = parse;
+        this(groupId, parse);
         //definimos qual topico esse consumidor esta escutando
         //eh super raro termos um consumidor que escuta de varios topicos - na maior parte das vezes escuta apenas um!
         consumer.subscribe(Collections.singletonList(topic));
+    }
+
+    //construtor para o logService - que recebe uma regex - pattern
+    public KafkaService(String groupId, Pattern topic, ConsumerFunction parse) {
+        this(groupId, parse);
+        consumer.subscribe(topic);
+    }
+
+    private KafkaService(String groupId, ConsumerFunction parse){
+        this.consumer = new KafkaConsumer<>(properties(groupId));
+        this.parse = parse;
     }
 
     public void run() {
