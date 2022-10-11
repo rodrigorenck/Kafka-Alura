@@ -2,6 +2,8 @@ package br.com.alura.ecommerce;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.util.Map;
+
 //consumidor
 //refatoramos - deixamos a maior parte da interacao com as libs de kafka na KafkaService
 public class EmailService {
@@ -11,7 +13,7 @@ public class EmailService {
 
     public static void main(String[] args) {
         var emailService = new EmailService();
-        try(var kafkaService = new KafkaService(groupId, topic, emailService::parse)){
+        try (var kafkaService = new KafkaService(groupId, topic, emailService::parse, String.class, Map.of())) {
             kafkaService.run();
         }
     }

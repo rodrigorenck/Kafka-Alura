@@ -2,12 +2,9 @@ package br.com.alura.ecommerce;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-import java.time.Duration;
-import java.util.Collections;
-import java.util.Properties;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 //consumidor
@@ -20,7 +17,12 @@ public class LogService {
 
     public static void main(String[] args) {
         var logService = new LogService();
-        try (var kafkaService = new KafkaService(groupdId, topic, logService::parse)) {
+        try (var kafkaService = new KafkaService<>(groupdId,
+                topic,
+                logService::parse,
+                String.class,
+                //configuracoes extras
+                Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()))) {
             kafkaService.run();
         }
     }
