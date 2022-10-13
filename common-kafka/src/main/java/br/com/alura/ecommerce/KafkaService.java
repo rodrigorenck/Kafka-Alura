@@ -18,7 +18,6 @@ public class KafkaService<T> implements Closeable {
 
     private final KafkaConsumer<String, T> consumer;
     private final ConsumerFunction<T> parse;
-    private final Class<T> type;
 
     /**
      * Vai receber o groupId - pois ele eh diferente dependendo do consumidor
@@ -42,7 +41,6 @@ public class KafkaService<T> implements Closeable {
     private KafkaService(String groupId, ConsumerFunction<T> parse, Class<T> type, Map<String, String> properties) {
         this.consumer = new KafkaConsumer<>(getProperties(type, groupId, properties));
         this.parse = parse;
-        this.type = type;
     }
 
 

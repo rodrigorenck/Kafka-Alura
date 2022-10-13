@@ -2,7 +2,6 @@ package br.com.alura.ecommerce;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import java.util.HashMap;
 import java.util.Map;
 
 //consumidor
@@ -14,7 +13,7 @@ public class FraudDetectorService {
     public static void main(String[] args) {
         var fraudDetectorService = new FraudDetectorService();
         //como nao queremos colocar configs extras nos criamos um mapa vazio, soh pra o compilador nao incomodar
-        try(var kafkaService = new KafkaService(groupId, topic, fraudDetectorService::parse, Order.class, Map.of())){
+        try(var kafkaService = new KafkaService<>(groupId, topic, fraudDetectorService::parse, Order.class, Map.of())){
             kafkaService.run();
         }
     }
