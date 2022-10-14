@@ -13,7 +13,7 @@ public class NewOrderMain {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         //try para dar um close no final
         try (var orderDispatcher = new KafkaDispatcher<Order>()) {
-            try (var emailDispatcher = new KafkaDispatcher<Email>()) {
+            try (var emailDispatcher = new KafkaDispatcher<String>()) {
                 for (int i = 0; i < 10; i++) {
                     //o kafka decide para qual particao vai mandar a mensagem com base na chave! - vamos fazer ser sempre uma chave diferente para vermos cair em particoes diferentes
                     //vamos simular que nossas chaves serao o id do usuario
@@ -26,7 +26,7 @@ public class NewOrderMain {
                     orderDispatcher.send("ECOMMERCE_NEW_ORDER", userId, order);
                     //vamos enviar outro record
                     var email = new Email("Thank you for your order", "We are processing your order");
-                    emailDispatcher.send("ECOMMERCE_SEND_EMAIL", userId, email);
+                    emailDispatcher.send("ECOMMERCE_SEND_EMAIL", userId, "Thank you for your order");
                 }
             }
         }

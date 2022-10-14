@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 /**
@@ -50,10 +51,17 @@ public class KafkaService<T> implements Closeable {
             //consumer pergunta se tem mensagem ai dentro por algum tempo -> recebo uma lista de registros
             var records = consumer.poll(Duration.ofMillis(100));
             if (!records.isEmpty()) {
-                System.out.println("Encontrei " + records.count() + " registros");
+                System.out.println();
+                System.out.println("Found " + records.count() + " records");
                 for (var record :
                         records) {
-                    parse.consume(record);
+                    try {
+                        parse.consume(record);
+                    } catch (Exception e) {
+                        //only catches Exception because no matter which Exception I want to recover and parse the next one
+                        //so far, just logging the exception for this message(record)
+                        e.printStackTrace();
+                    }
                 }
             }
         }
