@@ -42,10 +42,10 @@ public class FraudDetectorService {
         if (isFraud(order)) {
             //pretending that the fraud happens when the amount is >= 4500
             System.out.println("Order is a fraud!!!");
-            kafkaDispatcher.send("ECOMMERCE_ORDER_REJECTED", order.getUserId(), order);
+            kafkaDispatcher.send("ECOMMERCE_ORDER_REJECTED", order.getEmail(), order);
         } else {
             System.out.println("Approved: " + order);
-            kafkaDispatcher.send("ECOMMERCE_ORDER_APPROVED", order.getUserId(), order);
+            kafkaDispatcher.send("ECOMMERCE_ORDER_APPROVED", order.getEmail(), order);
         }
     }
 

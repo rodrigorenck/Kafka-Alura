@@ -16,17 +16,17 @@ public class NewOrderMain {
             try (var emailDispatcher = new KafkaDispatcher<String>()) {
                 for (int i = 0; i < 10; i++) {
                     //o kafka decide para qual particao vai mandar a mensagem com base na chave! - vamos fazer ser sempre uma chave diferente para vermos cair em particoes diferentes
-                    //vamos simular que nossas chaves serao o id do usuario
-                    var userId = UUID.randomUUID().toString();
                     var orderId = UUID.randomUUID().toString();
+                    //nossa chave sera o email do usuario -> quem gera o id do usuario eh o banco de dados!
+                    var email = Math.random() + "@email.com";
 
                     var amount = BigDecimal.valueOf(Math.random() * 5000 + 1);
-                    var order = new Order(userId, orderId, amount);
+                    var order = new Order(orderId, amount, email);
 
-                    orderDispatcher.send("ECOMMERCE_NEW_ORDER", userId, order);
+                    orderDispatcher.send("ECOMMERCE_NEW_ORDER", email, order);
                     //vamos enviar outro record
-                    var email = new Email("Thank you for your order", "We are processing your order");
-                    emailDispatcher.send("ECOMMERCE_SEND_EMAIL", userId, "Thank you for your order");
+                    var emailCode = new Email("Thank you for your order", "We are processing your order");
+                    emailDispatcher.send("ECOMMERCE_SEND_EMAIL", email, "Thank you for your order");
                 }
             }
         }
