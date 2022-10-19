@@ -33,6 +33,8 @@ public class KafkaDispatcher<T> implements Closeable {
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         //queremos serializar para um formato parecido com Json -> Gson
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, GsonSerializer.class.getName());
+        //mais seguranca - garanto que todas as replicas vao ter a informacao, mais lento porem mais seguro, caso o leader caia as replicas estarao no estado correto
+        properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
         return properties;
     }
 

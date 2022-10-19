@@ -10,6 +10,11 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Fast Delegate -> ele passa a mensagem rapido
+ * Ele deve fazer poucas coisas - quanto mais codigo aqui maior a chance de dar um erro e eu perder a compra
+ * Se eu envio a mensagem e da erro depois eu ja tenho um ponto de partida, por isso devemos enviar a mensagem antes que de algum erro
+ */
 public class NewOrderServlet extends HttpServlet {
 
     private final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
@@ -44,7 +49,6 @@ public class NewOrderServlet extends HttpServlet {
                 } catch (InterruptedException e) {
                     throw new ServletException(e);
                 }
-
             }
         }
 

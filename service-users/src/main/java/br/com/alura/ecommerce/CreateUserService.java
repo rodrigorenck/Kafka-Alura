@@ -45,7 +45,9 @@ public class CreateUserService {
         Order order = record.value();
         if (isNewUser(order.getEmail())) {
             insertNewUser(order.getEmail());
+            return;
         }
+        System.out.println("User already exists in the database");
     }
 
     private void insertNewUser(String email) throws SQLException {
