@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 public class KafkaService<T> implements Closeable {
 
-    private final KafkaConsumer<String, T> consumer;
+    private final KafkaConsumer<String, Message<T>> consumer;
     private final ConsumerFunction<T> parse;
 
     /**
@@ -81,7 +81,6 @@ public class KafkaService<T> implements Closeable {
         //se dois servicos tem o mesmo grupo as mensagens serao meio divididas
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
-        properties.setProperty(GsonDeserializer.TYPE_CONFIG, type.getName());
         //sobrescrevemos as configs padroes com as configs que o cara que chamou queira
         properties.putAll(overrideProperties);
         return properties;

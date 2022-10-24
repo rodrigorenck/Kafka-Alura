@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 //agora nosso KafkaDispatcher recebe um generico, ou seja o tipo de valor que ele vai enviar
 public class KafkaDispatcher<T> implements Closeable {
 
-    private final KafkaProducer<String, T> producer;
+    private final KafkaProducer<String, Message<T>> producer;
 
     public KafkaDispatcher(){
         this.producer = new KafkaProducer<>(properties());
@@ -39,8 +39,8 @@ public class KafkaDispatcher<T> implements Closeable {
     }
 
     //vai receber o topico a chave e o valor
-    public void send(String topic, String key, T value) throws ExecutionException, InterruptedException {
-        //recebe o topico como parametro -> depois ele recebe a chave e o valor
+    public void send(String topic, String key, T payload) throws ExecutionException, InterruptedException {
+        var value = new Message<T>(new CorrelationId(), payload);
         var record = new ProducerRecord<>(topic, key, value);
 
         //send devolve um Future - ou seja algo que vai executar daqui a pouco - ele eh Assincrono

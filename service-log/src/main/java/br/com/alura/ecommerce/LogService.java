@@ -17,7 +17,7 @@ public class LogService {
 
     public static void main(String[] args) {
         var logService = new LogService();
-        try (var kafkaService = new KafkaService<>(groupdId,
+        try (var kafkaService = new KafkaService(groupdId,
                 topic,
                 logService::parse,
                 String.class,
